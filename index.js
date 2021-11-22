@@ -3,7 +3,7 @@ const Intents = require("discord.js").Intents;
 const dotenv = require("dotenv");
 dotenv.config();
 
-const commands = require("./src/commands");
+const userCommands = require("./src/userCommands");
 const interaction = require("./src/interaction");
 
 const client = new DiscordJS.Client({
@@ -13,15 +13,18 @@ const client = new DiscordJS.Client({
 client.on("ready", () => {
   console.log("Bot is ready to roll");
 
-  commands(client, "ping", (message) => {
-    message.reply({
-      content: "pong",
-      ephemeral: true,
-    });
-  });
+  // FIXME:
+  // commands(client, "ping", (message) => {
+  //   message.reply({
+  //     content: "pong",
+  //     ephemeral: true,
+  //   });
+  // });
+
+  userCommands(client);
 
   interaction(client, (commands) => {
-    console.log(commands.guild);
+    // console.log(commands.guild);
   });
 });
 
