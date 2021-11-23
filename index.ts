@@ -23,9 +23,9 @@ client.on("ready", () => {
   userCommands(client);
 
   // FIXME: Solve error first
-  // interactions(client, (commands: any) => {
-  //   // console.log(commands.guild);
-  // });
+  interactions(client, (commands: any) => {
+    // console.log(commands.guild);
+  });
 });
 
 // FIXME:
