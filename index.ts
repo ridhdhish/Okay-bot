@@ -6,7 +6,11 @@ import userCommands from "./src/userCommands";
 import interactions from "./src/interactions";
 
 const client = new DiscordJS.Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
+  ],
 });
 
 client.on("ready", () => {

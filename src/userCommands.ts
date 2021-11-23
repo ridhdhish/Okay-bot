@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { Client, Message, Permissions } from "discord.js";
 
 import commands from "./utils/commands";
 
@@ -12,5 +12,23 @@ export default (client: Client) => {
   });
 
   // Displays server details
-  // commands(client, ["cc", "clearMessages"], (message) => {});
+  commands(client, "servers", (message: Message) => {
+    client.guilds.cache.forEach((guild) => {
+      message.reply({
+        content: `${guild.name} has ${guild.memberCount} members.`,
+      });
+    });
+  });
+
+  // Delete channel messages
+  // FIXME: Exception can only delete messages 14 days older
+  commands(client, "cc", (message: any) => {
+    if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+      if (message.channel.type === "GUILD_TEXT") {
+        // message.channel.messages.fetch().then((results: any) => {
+        //   console.log(message.channel.bulkDelete(results));
+        // });
+      }
+    }
+  });
 };
