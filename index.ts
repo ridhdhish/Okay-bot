@@ -1,10 +1,9 @@
-const DiscordJS = require("discord.js");
-const Intents = require("discord.js").Intents;
-const dotenv = require("dotenv");
+import DiscordJS, { Intents } from "discord.js";
+import dotenv from "dotenv";
 dotenv.config();
 
-const userCommands = require("./src/userCommands");
-const interaction = require("./src/interaction");
+import userCommands from "./src/userCommands";
+import interactions from "./src/interactions";
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -23,9 +22,10 @@ client.on("ready", () => {
 
   userCommands(client);
 
-  interaction(client, (commands) => {
-    // console.log(commands.guild);
-  });
+  // FIXME: Solve error first
+  // interactions(client, (commands: any) => {
+  //   // console.log(commands.guild);
+  // });
 });
 
 // FIXME:

@@ -1,6 +1,8 @@
+import { Client } from "discord.js";
+
 const prifix = "!";
 
-module.exports = (client, alias, callback) => {
+export default (client: Client, alias: string, callback: any) => {
   client.on("messageCreate", (message) => {
     if (message.content.startsWith(`${prifix}${alias}`)) {
       callback(message);
