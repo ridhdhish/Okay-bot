@@ -5,6 +5,7 @@ dotenv.config();
 import userCommands from "./src/userCommands";
 import interactions from "./src/interactions";
 import firstMessage from "./src/utils/first-message";
+import privateMessage from "./src/utils/privateMessage";
 
 const client = new DiscordJS.Client({
   intents: [
@@ -18,6 +19,7 @@ client.on("ready", () => {
   console.log("Bot is ready to roll");
 
   userCommands(client);
+  privateMessage(client);
 
   firstMessage(client, "914087983550959687", "Welcome my gorgeous friends!!", [
     "🍟",
