@@ -21,13 +21,13 @@ export default (client: Client) => {
   });
 
   // Delete channel messages
-  // FIXME: Exception can only delete messages 14 days older
+  // This can only delete messages under 14 days older
   commands(client, "cc", (message: any) => {
     if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
       if (message.channel.type === "GUILD_TEXT") {
-        // message.channel.messages.fetch().then((results: any) => {
-        //   console.log(message.channel.bulkDelete(results));
-        // });
+        message.channel.messages.fetch().then((results: any) => {
+          console.log(message.channel.bulkDelete(results));
+        });
       }
     }
   });
