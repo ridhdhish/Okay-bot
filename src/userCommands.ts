@@ -31,4 +31,18 @@ export default (client: Client) => {
       }
     }
   });
+
+  // Set the status of the bot
+  commands(client, "status", (message: Message) => {
+    const content = message.content.replace("!status", "");
+    client.user?.setPresence({
+      activities: [
+        {
+          name: content,
+          type: "LISTENING",
+        },
+      ],
+      status: "online",
+    });
+  });
 };

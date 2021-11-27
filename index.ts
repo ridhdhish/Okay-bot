@@ -4,6 +4,7 @@ dotenv.config();
 
 import userCommands from "./src/userCommands";
 import interactions from "./src/interactions";
+import firstMessage from "./src/utils/first-message";
 
 const client = new DiscordJS.Client({
   intents: [
@@ -17,6 +18,12 @@ client.on("ready", () => {
   console.log("Bot is ready to roll");
 
   userCommands(client);
+
+  firstMessage(client, "914087983550959687", "Welcome my gorgeous friends!!", [
+    "🍟",
+    "🍔",
+    "🥪",
+  ]);
 
   // FIXME: Solve error first
   interactions(client, (commands: any) => {
