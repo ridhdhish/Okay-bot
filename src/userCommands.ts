@@ -26,7 +26,7 @@ export default (client: Client) => {
     if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
       if (message.channel.type === "GUILD_TEXT") {
         message.channel.messages.fetch().then((results: any) => {
-          // console.log(message.channel.bulkDelete(results));
+          message.channel.bulkDelete(results);
         });
       }
     }
@@ -91,6 +91,32 @@ export default (client: Client) => {
       .setImage(
         "https://static.wikia.nocookie.net/disneythehunchbackofnotredame/images/f/f0/Bleach_213-006.jpg/revision/latest?cb=20140719221339"
       );
+
+    message.channel.send({
+      embeds: [embedMessage],
+    });
+  });
+
+  // Server Info
+  commands(client, "serverinfo", async (message: Message) => {
+    const guild = message.guild!;
+    const guildOwner = await guild?.fetchOwner();
+
+    const owner = guildOwner.user.username;
+    const icon = guild.iconURL()!;
+    const name = guild.name;
+    const memberCount = guild.memberCount;
+
+    const embedMessage = new DiscordJS.MessageEmbed();
+
+    embedMessage
+      .setTitle("Server Info")
+      .setThumbnail(icon)
+      .setFields([
+        { name: "Server Name", value: name },
+        { name: "Owner", value: owner },
+        { name: "Member Count", value: `${memberCount}` },
+      ]);
 
     message.channel.send({
       embeds: [embedMessage],
