@@ -45,4 +45,33 @@ export default (client: Client) => {
       status: "online",
     });
   });
+
+  // Craete text channel
+  commands(client, "createvoicechannel", (message: Message) => {
+    const channelName = message.content.replace("!createvoicechannel ", "");
+
+    message.guild?.channels
+      .create(channelName, {
+        type: "GUILD_VOICE",
+      })
+      .then((channel) => {
+        const channelCatagoryId = "750218825680551990";
+        channel.setParent(channelCatagoryId);
+        channel.setUserLimit(8);
+      });
+  });
+
+  // Create text channel
+  commands(client, "createtextchannel", (message: Message) => {
+    const channelName = message.content.replace("!createtextchannel ", "");
+
+    message.guild?.channels
+      .create(channelName, {
+        type: "GUILD_TEXT",
+      })
+      .then((channel) => {
+        const catagoryId = "750218825680551989";
+        channel.setParent(catagoryId);
+      });
+  });
 };
