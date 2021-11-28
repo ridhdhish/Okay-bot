@@ -1,4 +1,4 @@
-import { Client, Message, Permissions } from "discord.js";
+import DiscordJS, { Client, Message, Permissions } from "discord.js";
 
 import commands from "./utils/commands";
 
@@ -26,7 +26,7 @@ export default (client: Client) => {
     if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
       if (message.channel.type === "GUILD_TEXT") {
         message.channel.messages.fetch().then((results: any) => {
-          console.log(message.channel.bulkDelete(results));
+          // console.log(message.channel.bulkDelete(results));
         });
       }
     }
@@ -73,5 +73,27 @@ export default (client: Client) => {
         const catagoryId = "750218825680551989";
         channel.setParent(catagoryId);
       });
+  });
+
+  // Demo Embed
+  // TODO: Reddit meme with embeds.
+  commands(client, "embed", (message: Message) => {
+    const author = message.author.username;
+    const embedMessage = new DiscordJS.MessageEmbed();
+
+    embedMessage
+      .setAuthor(author)
+      .setDescription("Captain of 12th Division. Founder of research center.")
+      .setURL(
+        "https://static.wikia.nocookie.net/disneythehunchbackofnotredame/images/f/f0/Bleach_213-006.jpg/revision/latest?cb=20140719221339"
+      )
+      .setTitle("Mr. Kisuke Urahara")
+      .setImage(
+        "https://static.wikia.nocookie.net/disneythehunchbackofnotredame/images/f/f0/Bleach_213-006.jpg/revision/latest?cb=20140719221339"
+      );
+
+    message.channel.send({
+      embeds: [embedMessage],
+    });
   });
 };
