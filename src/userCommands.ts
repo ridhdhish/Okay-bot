@@ -122,4 +122,31 @@ export default (client: Client) => {
       embeds: [embedMessage],
     });
   });
+
+  // Display all commands
+  commands(client, "help", (message: Message) => {
+    const embedMessage = new DiscordJS.MessageEmbed();
+    embedMessage
+      .setDescription(
+        `
+    **!help** - Display all accessible commands
+    **!add** <num1> <num2> - Addition of two numbers
+    **!sub** <num1> <num2> - Subtraction of two numbers
+    **!mul** <num1> <num2> - Multiplication of two numbers
+    **!div** <num1> <num2> - Division of two numbers
+    **!servers** - Displays all server details
+    **!serverinfo** - Displays server details you are in
+    **!createtextchannel <name>** - Creates new text channel
+    **!createvoicechannel <name>** - Creates new voice channel
+    **!status <status>** - Set new status of bot.
+    **!cc** - Clear recent messages of perticular text channel
+    **!ping** - Reply with pong 
+    `
+      )
+      .setColor("BLUE");
+
+    message.channel.send({
+      embeds: [embedMessage],
+    });
+  });
 };

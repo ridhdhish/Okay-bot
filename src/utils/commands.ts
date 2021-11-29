@@ -1,10 +1,10 @@
 import { Client } from "discord.js";
 
-const prifix = "!";
+export const prefix = "!";
 
 export default (client: Client, alias: string, callback: any) => {
   client.on("messageCreate", (message) => {
-    if (message.content.startsWith(`${prifix}${alias}`)) {
+    if (message.content.startsWith(`${prefix}${alias}`)) {
       callback(message);
     }
   });
