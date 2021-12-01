@@ -1,6 +1,7 @@
 import DiscordJS, { Client, Message, Permissions } from "discord.js";
 
 import commands from "./utils/commands";
+import { ban, kick } from "./utils/kick-ban";
 
 export default (client: Client) => {
   // Command that replay with PONG
@@ -148,5 +149,14 @@ export default (client: Client) => {
     message.channel.send({
       embeds: [embedMessage],
     });
+  });
+
+  // Ban someone useless
+  commands(client, "ban", (message: Message) => {
+    ban(client, message);
+  });
+
+  commands(client, "kick", (message: Message) => {
+    kick(client, message);
   });
 };
