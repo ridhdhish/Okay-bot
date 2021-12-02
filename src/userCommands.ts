@@ -1,40 +1,35 @@
 import DiscordJS, { Client, Message, Permissions } from "discord.js";
 
-import commands from "./utils/commands";
+import commands, { prefix } from "./utils/commands";
 import { ban, kick } from "./utils/kick-ban";
 
-export default (client: Client) => {
-  // Command that replay with PONG
-  commands(client, "ping", (message: Message) => {
+export default async (client: Client, message: Message, command: string) => {
+  if (command === `${prefix}ping`) {
+    // Command that replay with PONG
     message.reply({
       content: "pong",
       tts: true,
     });
-  });
-
-  // Displays server details
-  commands(client, "servers", (message: Message) => {
+  } else if (command === `${prefix}servers`) {
+    // Displays server details
     client.guilds.cache.forEach((guild) => {
       message.reply({
         content: `${guild.name} has ${guild.memberCount} members.`,
       });
     });
-  });
-
-  // Delete channel messages
-  // This can only delete messages under 14 days older
-  commands(client, "cc", (message: any) => {
-    if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-      if (message.channel.type === "GUILD_TEXT") {
-        message.channel.messages.fetch().then((results: any) => {
-          message.channel.bulkDelete(results);
+  } else if (command === `${prefix}cc`) {
+    // Delete channel messages
+    // This can only delete messages under 14 days older
+    const _message: any = message;
+    if (_message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+      if (_message.channel.type === "GUILD_TEXT") {
+        _message.channel.messages.fetch().then((results: any) => {
+          _message.channel.bulkDelete(results);
         });
       }
     }
-  });
-
-  // Set the status of the bot
-  commands(client, "status", (message: Message) => {
+  } else if (command === `${prefix}status`) {
+    // Set the status of the bot
     const content = message.content.replace("!status", "");
     client.user?.setPresence({
       activities: [
@@ -45,40 +40,34 @@ export default (client: Client) => {
       ],
       status: "online",
     });
-  });
-
-  // Craete text channel
-  commands(client, "createvoicechannel", (message: Message) => {
+  } else if (command === `${prefix}createvoicechannel`) {
+    // Craete voice channel
     const channelName = message.content.replace("!createvoicechannel ", "");
 
     message.guild?.channels
       .create(channelName, {
         type: "GUILD_VOICE",
       })
-      .then((channel) => {
+      .then((channel: any) => {
         const channelCatagoryId = "750218825680551990";
         channel.setParent(channelCatagoryId);
         channel.setUserLimit(8);
       });
-  });
-
-  // Create text channel
-  commands(client, "createtextchannel", (message: Message) => {
+  } else if (command === `${prefix}createtextchannel`) {
+    // Craete text channel
     const channelName = message.content.replace("!createtextchannel ", "");
 
     message.guild?.channels
       .create(channelName, {
         type: "GUILD_TEXT",
       })
-      .then((channel) => {
+      .then((channel: any) => {
         const catagoryId = "750218825680551989";
         channel.setParent(catagoryId);
       });
-  });
-
-  // Demo Embed
-  // TODO: Reddit meme with embeds.
-  commands(client, "embed", (message: Message) => {
+  } else if (command === `${prefix}embed`) {
+    // Demo Embed
+    // TODO: Reddit meme with embeds.
     const author = message.author.username;
     const embedMessage = new DiscordJS.MessageEmbed();
 
@@ -96,10 +85,8 @@ export default (client: Client) => {
     message.channel.send({
       embeds: [embedMessage],
     });
-  });
-
-  // Server Info
-  commands(client, "serverinfo", async (message: Message) => {
+  } else if (command === `${prefix}serverinfo`) {
+    // Server Info
     const guild = message.guild!;
     const guildOwner = await guild?.fetchOwner();
 
@@ -122,10 +109,8 @@ export default (client: Client) => {
     message.channel.send({
       embeds: [embedMessage],
     });
-  });
-
-  // Display all commands
-  commands(client, "help", (message: Message) => {
+  } else if (command === `${prefix}help`) {
+    // Display all commands
     const embedMessage = new DiscordJS.MessageEmbed();
     embedMessage
       .setDescription(
@@ -149,14 +134,169 @@ export default (client: Client) => {
     message.channel.send({
       embeds: [embedMessage],
     });
-  });
-
-  // Ban someone useless
-  commands(client, "ban", (message: Message) => {
+  } else if (command === `${prefix}ban`) {
+    // Ban someone useless
     ban(client, message);
-  });
-
-  commands(client, "kick", (message: Message) => {
+  } else if (command === `${prefix}kick`) {
+    // kick someone useless
     kick(client, message);
-  });
+  } else {
+    console.log("Nothing");
+  }
+
+  //   // Command that replay with PONG
+  //   commands(client, "ping", (message: Message) => {
+  //     message.reply({
+  //       content: "pong",
+  //       tts: true,
+  //     });
+  //   });
+
+  //   // Displays server details
+  //   commands(client, "servers", (message: Message) => {
+  //     client.guilds.cache.forEach((guild) => {
+  //       message.reply({
+  //         content: `${guild.name} has ${guild.memberCount} members.`,
+  //       });
+  //     });
+  //   });
+
+  //   // Delete channel messages
+  //   // This can only delete messages under 14 days older
+  //   commands(client, "cc", (message: any) => {
+  //     if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+  //       if (message.channel.type === "GUILD_TEXT") {
+  //         message.channel.messages.fetch().then((results: any) => {
+  //           message.channel.bulkDelete(results);
+  //         });
+  //       }
+  //     }
+  //   });
+
+  //   // Set the status of the bot
+  //   commands(client, "status", (message: Message) => {
+  //     const content = message.content.replace("!status", "");
+  //     client.user?.setPresence({
+  //       activities: [
+  //         {
+  //           name: content,
+  //           type: "LISTENING",
+  //         },
+  //       ],
+  //       status: "online",
+  //     });
+  //   });
+
+  //   // Craete text channel
+  //   commands(client, "createvoicechannel", (message: Message) => {
+  //     const channelName = message.content.replace("!createvoicechannel ", "");
+
+  //     message.guild?.channels
+  //       .create(channelName, {
+  //         type: "GUILD_VOICE",
+  //       })
+  //       .then((channel) => {
+  //         const channelCatagoryId = "750218825680551990";
+  //         channel.setParent(channelCatagoryId);
+  //         channel.setUserLimit(8);
+  //       });
+  //   });
+
+  //   // Create text channel
+  //   commands(client, "createtextchannel", (message: Message) => {
+  //     const channelName = message.content.replace("!createtextchannel ", "");
+
+  //     message.guild?.channels
+  //       .create(channelName, {
+  //         type: "GUILD_TEXT",
+  //       })
+  //       .then((channel) => {
+  //         const catagoryId = "750218825680551989";
+  //         channel.setParent(catagoryId);
+  //       });
+  //   });
+
+  //   // Demo Embed
+  //   // TODO: Reddit meme with embeds.
+  //   commands(client, "embed", (message: Message) => {
+  //     const author = message.author.username;
+  //     const embedMessage = new DiscordJS.MessageEmbed();
+
+  //     embedMessage
+  //       .setAuthor(author)
+  //       .setDescription("Captain of 12th Division. Founder of research center.")
+  //       .setURL(
+  //         "https://static.wikia.nocookie.net/disneythehunchbackofnotredame/images/f/f0/Bleach_213-006.jpg/revision/latest?cb=20140719221339"
+  //       )
+  //       .setTitle("Mr. Kisuke Urahara")
+  //       .setImage(
+  //         "https://static.wikia.nocookie.net/disneythehunchbackofnotredame/images/f/f0/Bleach_213-006.jpg/revision/latest?cb=20140719221339"
+  //       );
+
+  //     message.channel.send({
+  //       embeds: [embedMessage],
+  //     });
+  //   });
+
+  //   // Server Info
+  //   commands(client, "serverinfo", async (message: Message) => {
+  //     const guild = message.guild!;
+  //     const guildOwner = await guild?.fetchOwner();
+
+  //     const owner = guildOwner.user.username;
+  //     const icon = guild.iconURL()!;
+  //     const name = guild.name;
+  //     const memberCount = guild.memberCount;
+
+  //     const embedMessage = new DiscordJS.MessageEmbed();
+
+  //     embedMessage
+  //       .setTitle("Server Info")
+  //       .setThumbnail(icon)
+  //       .setFields([
+  //         { name: "Server Name", value: name },
+  //         { name: "Owner", value: owner },
+  //         { name: "Member Count", value: `${memberCount}` },
+  //       ]);
+
+  //     message.channel.send({
+  //       embeds: [embedMessage],
+  //     });
+  //   });
+
+  //   // Display all commands
+  //   commands(client, "help", (message: Message) => {
+  //     const embedMessage = new DiscordJS.MessageEmbed();
+  //     embedMessage
+  //       .setDescription(
+  //         `
+  //     **!help** - Display all accessible commands
+  //     **!add** <num1> <num2> - Addition of two numbers
+  //     **!sub** <num1> <num2> - Subtraction of two numbers
+  //     **!mul** <num1> <num2> - Multiplication of two numbers
+  //     **!div** <num1> <num2> - Division of two numbers
+  //     **!servers** - Displays all server details
+  //     **!serverinfo** - Displays server details you are in
+  //     **!createtextchannel <name>** - Creates new text channel
+  //     **!createvoicechannel <name>** - Creates new voice channel
+  //     **!status <status>** - Set new status of bot.
+  //     **!cc** - Clear recent messages of perticular text channel
+  //     **!ping** - Reply with pong
+  //     `
+  //       )
+  //       .setColor("BLUE");
+
+  //     message.channel.send({
+  //       embeds: [embedMessage],
+  //     });
+  //   });
+
+  //   // Ban someone useless
+  //   commands(client, "ban", (message: Message) => {
+  //     ban(client, message);
+  //   });
+
+  //   commands(client, "kick", (message: Message) => {
+  //     kick(client, message);
+  //   });
 };

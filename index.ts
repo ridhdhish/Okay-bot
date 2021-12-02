@@ -31,7 +31,7 @@ client.on("ready", () => {
     ],
   });
 
-  userCommands(client);
+  // userCommands(client, "");
   privateMessage(client);
   role(client);
 
@@ -45,6 +45,13 @@ client.on("ready", () => {
   interactions(client, (commands: any) => {
     // console.log(commands.guild);
   });
+});
+
+client.on("messageCreate", (message) => {
+  if (message.content.startsWith(`${prefix}`)) {
+    const commandMessage = message.content.split(" ");
+    userCommands(client, message, commandMessage[0]);
+  }
 });
 
 client.login(process.env.TOKEN);
