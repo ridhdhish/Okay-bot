@@ -10,6 +10,7 @@ import firstMessage from "./src/utils/first-message";
 import privateMessage from "./src/utils/privateMessage";
 import role from "./src/utils/role";
 import welocome from "./src/utils/welocome";
+import memberCount from "./src/utils/member-count";
 
 const client = new DiscordJS.Client({
   intents: [
@@ -35,6 +36,7 @@ client.on("ready", () => {
   privateMessage(client);
   role(client);
   welocome(client);
+  memberCount(client);
 
   // firstMessage(client, "914087983550959687", "Welcome my gorgeous friends!!", [
   //   "🍟",
