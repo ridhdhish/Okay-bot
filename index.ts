@@ -2,6 +2,8 @@ import DiscordJS, { Intents } from "discord.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+import mongo from "./src/mongo";
+
 import { prefix } from "./src/utils/commands";
 
 import userCommands from "./src/userCommands";
@@ -21,8 +23,18 @@ const client = new DiscordJS.Client({
   ],
 });
 
-client.on("ready", () => {
+client.on("ready", async () => {
   console.log("Bot is ready to roll");
+
+  await mongo().then((mongoose) => {
+    try {
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // Close the connection
+      mongoose.connection.close();
+    }
+  });
 
   client.user?.setPresence({
     activities: [
