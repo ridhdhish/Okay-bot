@@ -144,7 +144,7 @@ export default async (client: Client, message: Message, command: string) => {
   } else if (command === `${prefix}poll`) {
     poll(message);
   } else {
-    console.log("Nothing");
+    // console.log("Nothing");
   }
 
   //   // Command that replay with PONG

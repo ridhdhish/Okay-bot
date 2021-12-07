@@ -11,8 +11,12 @@ import interactions from "./src/interactions";
 import firstMessage from "./src/utils/first-message";
 import privateMessage from "./src/utils/privateMessage";
 import role from "./src/utils/role";
-import welocome from "./src/utils/welocome";
+import welocome from "./src/utils/welcome";
 import memberCount from "./src/utils/member-count";
+import { Mongoose } from "mongoose";
+import welcomeChannel from "./src/utils/welcome-channel";
+
+let mongoose: Mongoose;
 
 const client = new DiscordJS.Client({
   intents: [
@@ -26,13 +30,14 @@ const client = new DiscordJS.Client({
 client.on("ready", async () => {
   console.log("Bot is ready to roll");
 
-  await mongo().then((mongoose) => {
+  await mongo().then((mongooseRes) => {
     try {
+      mongoose = mongooseRes;
     } catch (err) {
       console.log(err);
     } finally {
       // Close the connection
-      mongoose.connection.close();
+      // mongooseRes.connection.close();
     }
   });
 
@@ -45,6 +50,7 @@ client.on("ready", async () => {
     ],
   });
 
+  welcomeChannel(client, mongoose);
   privateMessage(client);
   role(client);
   welocome(client);

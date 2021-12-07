@@ -1,9 +1,14 @@
 import { Client, GuildChannel, TextChannel } from "discord.js";
+import welcomeSchema from "../Schemas/welcome-schema";
 
 export default (client: Client) => {
-  client.on("guildMemberAdd", (member) => {
+  // FIXME: Displaying multiple welcome messages and also sends message in multiple channels
+  client.on("guildMemberAdd", async (member) => {
+    const guildId = member.guild.id;
+    const data = await welcomeSchema.findById(guildId);
+
     const targetChannel = "914087983550959687";
-    const welcomeChannel = "915933592952115200";
+    const welcomeChannel = data.channelId;
 
     const message = `Welocome <@${
       member.id
