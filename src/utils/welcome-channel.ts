@@ -6,6 +6,8 @@ import commands from "./commands";
 import welcome from "./welcome";
 
 export default (client: Client, mongoose: Mongoose) => {
+  let cache: any = {};
+
   commands(client, "setWelcome", async (message: Message) => {
     const member = message.member;
     const guild = message.guild!;
@@ -18,17 +20,19 @@ export default (client: Client, mongoose: Mongoose) => {
       text = "WELCOME THIS AMAZING SERVER ✨✨";
     }
 
-    console.log(text);
+    cache[guild.id] = [channel.id, text];
 
     if (!member?.permissions.has("ADMINISTRATOR")) {
       channel.send("Fuck you! You don't have permission.. 🖕");
       return;
     }
 
+    console.log(guild.id);
+
     await welcomeSchema.findOneAndUpdate(
       { _id: guild.id },
       {
-        _id: guild?.id,
+        _id: guild.id,
         channelId: channel.id,
         text,
       },
@@ -36,5 +40,14 @@ export default (client: Client, mongoose: Mongoose) => {
     );
   });
 
-  welcome(client);
+  // On member add displays welocme message
+  client.on("guildMemberAdd", async (member) => {
+    const guild = member.guild;
+    if (!cache[guild.id]) {
+      const data = await welcomeSchema.findById(guild.id);
+      cache[guild.id] = [data.channelId, data.text];
+    }
+
+    welcome(member, cache[guild.id]);
+  });
 };
