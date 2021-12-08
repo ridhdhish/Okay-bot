@@ -5,8 +5,6 @@ import welcomeSchema from "../Schemas/welcome-schema";
 import commands from "./commands";
 import welcome from "./welcome";
 
-// FIXME: Displaying multiple welcome messages and also sends message in multiple channels
-
 export default (client: Client, mongoose: Mongoose) => {
   commands(client, "setWelcome", async (message: Message) => {
     const member = message.member;
@@ -14,10 +12,13 @@ export default (client: Client, mongoose: Mongoose) => {
     const channel = message.channel;
     const content = message.content;
 
-    let text = content.replace("!setWelcome ", "");
+    let text = content.replace("!setWelcome", "");
+    console.log(text);
     if (!text) {
       text = "WELCOME THIS AMAZING SERVER ✨✨";
     }
+
+    console.log(text);
 
     if (!member?.permissions.has("ADMINISTRATOR")) {
       channel.send("Fuck you! You don't have permission.. 🖕");

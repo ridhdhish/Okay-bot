@@ -11,7 +11,6 @@ import interactions from "./src/interactions";
 import firstMessage from "./src/utils/first-message";
 import privateMessage from "./src/utils/privateMessage";
 import role from "./src/utils/role";
-import welocome from "./src/utils/welcome";
 import memberCount from "./src/utils/member-count";
 import { Mongoose } from "mongoose";
 import welcomeChannel from "./src/utils/welcome-channel";
@@ -53,7 +52,6 @@ client.on("ready", async () => {
   welcomeChannel(client, mongoose);
   privateMessage(client);
   role(client);
-  welocome(client);
   memberCount(client);
 
   // firstMessage(client, "914087983550959687", "Welcome my gorgeous friends!!", [
