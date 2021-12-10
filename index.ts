@@ -14,6 +14,7 @@ import role from "./src/utils/role";
 import memberCount from "./src/utils/member-count";
 import { Mongoose } from "mongoose";
 import welcomeChannel from "./src/utils/welcome-channel";
+import messageCount from "./src/utils/message-count";
 
 let mongoose: Mongoose;
 
@@ -67,6 +68,7 @@ client.on("ready", async () => {
 });
 
 client.on("messageCreate", (message) => {
+  messageCount(message);
   if (message.content.startsWith(`${prefix}`)) {
     const commandMessage = message.content.split(" ");
     userCommands(client, message, commandMessage[0]);
