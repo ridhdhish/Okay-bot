@@ -2,6 +2,7 @@ import DiscordJS, { Client, Message, Permissions } from "discord.js";
 
 import commands, { prefix } from "./utils/commands";
 import { ban, kick } from "./utils/kick-ban";
+import mute from "./utils/mute";
 import poll from "./utils/poll";
 
 export default async (client: Client, message: Message, command: string) => {
@@ -143,6 +144,8 @@ export default async (client: Client, message: Message, command: string) => {
     kick(client, message);
   } else if (command === `${prefix}poll`) {
     poll(message);
+  } else if (command === `${prefix}mute`) {
+    mute(message);
   } else {
     // console.log("Nothing");
   }
