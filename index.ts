@@ -15,6 +15,7 @@ import memberCount from "./src/utils/member-count";
 import { Mongoose } from "mongoose";
 import welcomeChannel from "./src/utils/welcome-channel";
 import messageCount from "./src/utils/message-count";
+import { muteUser } from "./src/utils/mute";
 
 let mongoose: Mongoose;
 
@@ -73,6 +74,10 @@ client.on("messageCreate", (message) => {
     const commandMessage = message.content.split(" ");
     userCommands(client, message, commandMessage[0]);
   }
+});
+
+client.on("guildMemberAdd", (member) => {
+  muteUser(member);
 });
 
 client.login(process.env.TOKEN);

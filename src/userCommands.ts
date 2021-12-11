@@ -145,7 +145,7 @@ export default async (client: Client, message: Message, command: string) => {
   } else if (command === `${prefix}poll`) {
     poll(message);
   } else if (command === `${prefix}mute`) {
-    mute(message);
+    mute(client, message);
   } else {
     // console.log("Nothing");
   }
