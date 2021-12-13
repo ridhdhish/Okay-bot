@@ -38,9 +38,11 @@ export default async (client: Client, message: Message) => {
 
   // Subscribing to key expire.
   subscribe("__keyevent@0__:expired", (message: string) => {
-    const memberId = message.replace("mute-", "");
+    const split = message.split("-");
 
-    const member = guild.members.cache.get(memberId)!;
+    const guild = client.guilds.cache.get(split[2])!;
+
+    const member = guild.members.cache.get(split[1])!;
     const role = member?.guild.roles.cache.find(
       (role) => role.name === "Muted"
     )!;
@@ -95,11 +97,11 @@ export default async (client: Client, message: Message) => {
 
   try {
     if (seconds > 0) {
-      await redisClient.set(`${redisPrefix}${user.id}`, "true", {
+      await redisClient.set(`${redisPrefix}${user.id}-${guild.id}`, "true", {
         EX: seconds,
       });
     } else {
-      await redisClient.set(`${redisPrefix}${user.id}`, "true");
+      await redisClient.set(`${redisPrefix}${user.id}-${guild.id}`, "true");
     }
   } catch (err) {
     console.log(err);
