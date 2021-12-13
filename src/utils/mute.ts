@@ -1,5 +1,6 @@
 import { Client, GuildMember, Message } from "discord.js";
-import redis, { expire } from "../redis";
+import redis from "../redis";
+import { subscribe } from "./pubsub";
 
 const redisPrefix = "mute-";
 
@@ -7,7 +8,6 @@ const assignRole = (member: GuildMember) => {
   const role = member.guild.roles.cache.find((role) => role.name === "Muted");
   if (role) {
     member.roles.add(role);
-    console.log("Muted: ", member.id);
   }
 };
 
@@ -28,14 +28,24 @@ export const muteUser = async (member: GuildMember) => {
 export default async (client: Client, message: Message) => {
   // !mute <@> duration durationType
 
-  expire((message: any) => {
-    console.log(message);
-  });
-
   if (!message.member?.permissions.has("ADMINISTRATOR")) {
     message.channel.send("You don't have to mute anyone!!");
     return;
   }
+
+  const { member, content, mentions, channel } = message;
+  const guild = message.guild!;
+
+  // Subscribing to key expire.
+  subscribe("__keyevent@0__:expired", (message: string) => {
+    const memberId = message.replace("mute-", "");
+
+    const member = guild.members.cache.get(memberId)!;
+    const role = member?.guild.roles.cache.find(
+      (role) => role.name === "Muted"
+    )!;
+    member.roles.remove(role);
+  });
 
   const syntax = "!mute <@> <duration in number> <m, h, d, or life>";
   const durations: any = {
@@ -44,9 +54,6 @@ export default async (client: Client, message: Message) => {
     d: 60 * 60 * 24,
     life: -1,
   };
-
-  const { member, content, mentions, channel } = message;
-  const guild = message.guild!;
 
   const splitData = content.trim().split(/\s+/);
 
@@ -83,10 +90,13 @@ export default async (client: Client, message: Message) => {
   const seconds = duration * durations[durationType];
 
   const redisClient: any = await redis();
+  redisClient.configSet("notify-keyspace-events", "Ex");
+  redisClient.sendCommand(["set", "notify-keyspace-events", "Ex"]);
+
   try {
     if (seconds > 0) {
       await redisClient.set(`${redisPrefix}${user.id}`, "true", {
-        EX: 3,
+        EX: seconds,
       });
     } else {
       await redisClient.set(`${redisPrefix}${user.id}`, "true");
